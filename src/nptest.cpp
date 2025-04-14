@@ -58,6 +58,9 @@ static bool want_width_file;
 
 static bool continue_after_dl_miss = false;
 
+static std::string task_chains_file;
+static bool want_task_chain;
+
 #ifdef CONFIG_PARALLEL
 static unsigned int num_worker_threads = 0;
 #endif
@@ -70,6 +73,7 @@ struct Analysis_result {
 	std::string graph;
 	std::string response_times_csv;
 	std::string width_evolution_csv;
+	std::string data_age_reaction_time_csv;
 };
 
 
@@ -78,6 +82,7 @@ static Analysis_result analyze(
 	std::istream &in,
 	std::istream &prec_in,
 	std::istream &aborts_in,
+	std::istream &task_chain_in,
     bool &is_yaml)
 {
 #ifdef CONFIG_PARALLEL
@@ -89,13 +94,18 @@ static Analysis_result analyze(
     typename NP::Job<Time>::Job_set jobs = is_yaml ? NP::parse_yaml_job_file<Time>(in) : NP::parse_csv_job_file<Time>(in);
 	// Parse precedence constraints
 	std::vector<NP::Precedence_constraint<Time>> edges = is_yaml ? NP::parse_yaml_dag_file<Time>(prec_in) : NP::parse_precedence_file<Time>(prec_in);
-
+	// Parse task chains
+	//std::vector<NP::Task_chain<Time>> task_chains = is_yaml ? NP::parse_yaml_task_chain_file<Time>(task_chain_in) : NP::parse_task_chain_file<Time>(task_chain_in);
+	std::vector<NP::Task_chain<Time>> task_chains = NP::parse_yaml_task_chain_file<Time>(task_chain_in);
+	//std::vector<Time> DA_max(task_chains.size()), RT_max(task_chains.size());
+	
 	NP::Scheduling_problem<Time> problem{
         jobs,
 		edges,
 		NP::parse_abort_file<Time>(aborts_in),
+		task_chains,
 		num_processors};
-
+	
 	// Set common analysis options
 	NP::Analysis_options opts;
 	opts.verbose = want_verbose;
@@ -109,7 +119,7 @@ static Analysis_result analyze(
 
 	// Actually call the analysis engine
 	auto space = Space::explore(problem, opts);
-
+	
 	// Extract the analysis results
 	auto graph = std::ostringstream();
 #ifdef CONFIG_COLLECT_SCHEDULE_GRAPH
@@ -148,6 +158,15 @@ static Analysis_result analyze(
 		}
 	}
 
+	auto DA_RT_stream = std::ostringstream();
+	if (want_task_chain) {
+		DA_RT_stream << "Task chain id, max data age, max reaction time"<<std::endl;
+		for (unsigned long i=0;i<task_chains.size();i++){
+			DA_RT_stream<<i<<", "<<space->get_max_data_age(i)
+							<<", "<<space->get_max_reaction_time(i);
+		}
+	}
+
 	Analysis_result results = Analysis_result{
 		space->is_schedulable(),
 		space->was_timed_out(),
@@ -159,7 +178,8 @@ static Analysis_result analyze(
 		space->get_cpu_time(),
 		graph.str(),
 		rta.str(),
-		width_stream.str()
+		width_stream.str(),
+		DA_RT_stream.str()
 	};
 	delete space;
 	return results;
@@ -169,16 +189,17 @@ static Analysis_result process_stream(
 	std::istream &in,
 	std::istream &prec_in,
 	std::istream &aborts_in,
+	std::istream &task_chain_in,
     bool is_yaml)
 {
 	if (want_multiprocessor && want_dense)
-		return analyze<dense_t, NP::Global::State_space<dense_t>>(in, prec_in, aborts_in, is_yaml);
+		return analyze<dense_t, NP::Global::State_space<dense_t>>(in, prec_in, aborts_in, task_chain_in, is_yaml);
 	else if (want_multiprocessor && !want_dense)
-		return analyze<dtime_t, NP::Global::State_space<dtime_t>>(in, prec_in, aborts_in, is_yaml);
+		return analyze<dtime_t, NP::Global::State_space<dtime_t>>(in, prec_in, aborts_in, task_chain_in, is_yaml);
 	else if (want_dense)
-		return analyze<dense_t, NP::Global::State_space<dense_t>>(in, prec_in, aborts_in, is_yaml);
+		return analyze<dense_t, NP::Global::State_space<dense_t>>(in, prec_in, aborts_in, task_chain_in, is_yaml);
 	else
-		return analyze<dtime_t, NP::Global::State_space<dtime_t>>(in, prec_in, aborts_in, is_yaml);
+		return analyze<dtime_t, NP::Global::State_space<dtime_t>>(in, prec_in, aborts_in, task_chain_in, is_yaml);
 }
 
 static void process_file(const std::string& fname)
@@ -188,14 +209,20 @@ static void process_file(const std::string& fname)
 
 		auto empty_dag_stream = std::istringstream("\n");
 		auto empty_aborts_stream = std::istringstream("\n");
+		auto empty_task_chain_stream = std::istringstream("\n");
 		auto dag_stream = std::ifstream();
 		auto aborts_stream = std::ifstream();
+		auto task_chain_stream = std::ifstream();
 
 		if (want_precedence)
 			dag_stream.open(precedence_file);
 
 		if (want_aborts)
 			aborts_stream.open(aborts_file);
+
+		if (want_task_chain)
+			task_chain_stream.open(task_chains_file);
+		
 
 		std::istream &dag_in = want_precedence ?
 			static_cast<std::istream&>(dag_stream) :
@@ -205,9 +232,13 @@ static void process_file(const std::string& fname)
 			static_cast<std::istream&>(aborts_stream) :
 			static_cast<std::istream&>(empty_aborts_stream);
 
+		std::istream &task_chain_in = want_task_chain ?
+			static_cast<std::istream&>(task_chain_stream) :
+			static_cast<std::istream&>(empty_task_chain_stream);
+
 		if (fname == "-")
 		{
-			result = process_stream(std::cin, dag_in, aborts_in, false);
+			result = process_stream(std::cin, dag_in, aborts_in, task_chain_in, false);
 		}
 		else {
             // check the extension of the file
@@ -218,7 +249,7 @@ static void process_file(const std::string& fname)
             }
 
 			auto in = std::ifstream(fname, std::ios::in);
-			result = process_stream(in, dag_in, aborts_in, is_yaml);
+			result = process_stream(in, dag_in, aborts_in, task_chain_in, is_yaml);
 
 #ifdef CONFIG_COLLECT_SCHEDULE_GRAPH
 			if (want_dot_graph) {
@@ -251,6 +282,17 @@ static void process_file(const std::string& fname)
 					width_file_name.replace(p, std::string::npos, ".width.csv");
 					auto out = std::ofstream(width_file_name, std::ios::out);
 					out << result.width_evolution_csv;
+					out.close();
+				}
+			}
+
+			if (want_task_chain){
+				std::string tc_name = fname;
+				auto p = is_yaml ? tc_name.find(".yaml") : tc_name.find(".csv");
+				if (p!=std::string::npos){
+					tc_name.replace(p, std::string::npos, ".taskchain.csv");
+					auto out = std::ofstream(tc_name, std::ios::out);
+					out << result.data_age_reaction_time_csv;
 					out.close();
 				}
 			}
@@ -407,6 +449,9 @@ int main(int argc, char** argv)
 	      .help("do not abort the analysis on the first deadline miss "
 	            "(default: off)");
 
+	parser.add_option("--taskchains").dest("task_chains_file").set_default("")
+			.help("yaml file of task chains");
+
 
 	auto options = parser.parse_args(argc, argv);
 	//all the options that could have been entered above are processed below and appropriate variables
@@ -477,7 +522,9 @@ int main(int argc, char** argv)
 		std::cerr << "Error: invalid number of processors\n" << std::endl;
 		return 1;
 	}
-
+	want_task_chain = options.is_set_by_user("task_chains_file");
+	task_chains_file = (const std::string&) options.get("task_chains_file");
+	
 	want_rta_file = options.get("rta");
 	want_width_file = options.get("rta");
 

@@ -2,6 +2,7 @@
 #define NP_PROBLEM_HPP
 
 #include "jobs.hpp"
+#include "taskchain.hpp"
 #include "precedence.hpp"
 #include "aborts.hpp"
 
@@ -14,6 +15,7 @@ namespace NP {
 		typedef typename Job<Time>::Job_set Workload;
 		typedef typename std::vector<Abort_action<Time>> Abort_actions;
 		typedef typename std::vector<Precedence_constraint<Time>> Precedence_constraints;
+		typedef typename std::vector<Task_chain<Time>> Task_chains;
 
 		// ** Description of the workload:
 		// (1) a set of jobs
@@ -22,6 +24,8 @@ namespace NP {
 		Precedence_constraints prec;
 		// (3) abort actions for (some of) the jobs
 		Abort_actions aborts;
+		// (4) list of task chains under analysis
+		Task_chains task_chains;
 
 		// ** Platform model:
 		// on how many (identical) processors are the jobs being
@@ -57,6 +61,43 @@ namespace NP {
 		Scheduling_problem(const Workload& jobs,
 		                   unsigned int num_processors = 1)
 		: jobs(jobs)
+		, num_processors(num_processors)
+		{
+			assert(num_processors > 0);
+		}
+
+		// Classic default setup: no abort actions with task chains
+		Scheduling_problem(const Workload& jobs, const Precedence_constraints& prec, const std::vector<Task_chain<Time>>& task_chains,
+		                   unsigned int num_processors = 1)
+		: num_processors(num_processors)
+		, jobs(jobs)
+		, prec(prec)
+		, task_chains(task_chains)
+		{
+			assert(num_processors > 0);
+			validate_prec_cstrnts<Time>(this->prec, jobs);
+		}
+
+		// Constructor with abort actions and precedence constraints and task chains
+		Scheduling_problem(const Workload& jobs, const Precedence_constraints& prec,
+			const Abort_actions& aborts, const std::vector<Task_chain<Time>>& task_chains,
+			unsigned int num_processors)
+		: num_processors(num_processors)
+		, jobs(jobs)
+		, prec(prec)
+		, task_chains(task_chains)
+		, aborts(aborts)
+		{
+		assert(num_processors > 0);
+		validate_prec_cstrnts<Time>(this->prec, jobs);
+		validate_abort_refs<Time>(aborts, jobs);
+		}
+
+		// Convenience constructor: no DAG, no abort actions, with task chains
+		Scheduling_problem(const Workload& jobs, const std::vector<Task_chain<Time>>& task_chains,
+		                   unsigned int num_processors = 1)
+		: jobs(jobs)
+		, task_chains(task_chains)
 		, num_processors(num_processors)
 		{
 			assert(num_processors > 0);

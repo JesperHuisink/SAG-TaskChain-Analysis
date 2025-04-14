@@ -15,6 +15,8 @@
 #include "util.hpp"
 #include "global/state_space_data.hpp"
 
+#include "taskchain.hpp"
+
 namespace NP {
 
 	namespace Global {
@@ -69,6 +71,11 @@ namespace NP {
 			// job_finish_times holds the finish times of all the jobs that still have an unscheduled successor
 			Job_finish_times job_finish_times;
 
+			// task chain analysis
+			// EPI of task k in chain c access: task_chain_intervals["EPI"][(k,c)]
+			//typedef std::map<std::string,std::map<std::pair<Task<Time>,Task_chain<Time>>,Time>> TCI;
+			TCD<Time> tc_data;
+
 		public:
 
 			// initial state -- nothing yet has finished, nothing is running
@@ -77,7 +84,8 @@ namespace NP {
 				, certain_jobs{}
 				, earliest_certain_successor_job_disptach{ Time_model::constants<Time>::infinity() }
 				, earliest_certain_gang_source_job_disptach{ state_space_data.get_earliest_certain_gang_source_job_release() }
-			{
+				, tc_data{ init_task_chain_data_structure(state_space_data.get_task_chains()) }
+			{ 
 				assert(core_avail.size() > 0);
 			}
 
@@ -114,6 +122,9 @@ namespace NP {
 
 				// NOTE: must be done after the core availabilities have been updated
 				update_earliest_certain_gang_source_job_disptach(next_source_job_rel, scheduled_jobs, state_space_data);
+
+				update_task_chain_data(from, j, state_space_data, start_times.min(), start_times.max(),
+						finish_times.min(), finish_times.max());
 
 				DM("*** new state: constructed " << *this << std::endl);
 			}
@@ -230,7 +241,7 @@ namespace NP {
 				if (!can_merge_with(other, conservative, use_job_finish_times))
 					return false;
 
-				merge(other.core_avail, other.job_finish_times, other.certain_jobs, other.earliest_certain_successor_job_disptach);
+				merge(other.core_avail, other.job_finish_times, other.certain_jobs, other.earliest_certain_successor_job_disptach, other.tc_data);
 
 				DM("+++ merged " << other << " into " << *this << std::endl);
 				return true;
@@ -240,8 +251,20 @@ namespace NP {
 				const Core_availability& cav,
 				const Job_finish_times& jft,
 				const std::vector<Running_job>& cert_j,
-				Time ecsj_ready_time)
+				Time ecsj_ready_time,
+				const TCD<Time>& tc_data_other)
 			{
+				// Task chain merge
+				for(int i=0;i<tc_data.EST_prev.size();i++){
+					tc_data.EST_prev[i]=std::min(tc_data.EST_prev[i],tc_data_other.EST_prev[i]);
+					tc_data.DA_max[i] = std::max(tc_data.DA_max[i],tc_data_other.DA_max[i]);
+					tc_data.RT_max[i] = std::max(tc_data.RT_max[i],tc_data_other.RT_max[i]);
+					for(int j=0;j<tc_data.z_min[i].size();j++){
+						tc_data.z_min[i][j] = std::min(tc_data.z_min[i][j],tc_data_other.z_min[i][j]);
+						tc_data.z_max[i][j] = std::max(tc_data.z_max[i][j],tc_data_other.z_max[i][j]);
+					}
+				} // end task chain merge
+
 				for (int i = 0; i < core_avail.size(); i++)
 					core_avail[i] |= cav[i];
 
@@ -309,6 +332,15 @@ namespace NP {
 					first = false;
 				}
 				out << "}";
+				
+				for(int i=0;i<tc_data.z_max.size();i++){ // for task chain i
+					out << "\nTaskchain " << i << " EST_prev = " <<tc_data.EST_prev[i]<<std::endl;
+					out << "max DA: " << tc_data.DA_max[i]<<", max RT: "<<tc_data.RT_max[i]<<std::endl;
+					for(int j=0;j<tc_data.z_max[i].size();j++){ // for task j in chain i
+						out << "z_min_"<<j<<" = "<<tc_data.z_min[i][j]<< ", z_max_"<<j<<" = "<<tc_data.z_max[i][j]<<", input id: "<<tc_data.input_job_index[i][j]<<std::endl;
+					}
+				}
+					
 			}
 
 		private:
@@ -601,6 +633,81 @@ namespace NP {
 				}
 				return start;
 			}
+
+			TCD<Time> init_task_chain_data_structure(std::vector<Task_chain<Time>> TC_set){
+				//typedef TCI = std::map<std::string,std::map<std::pair<Task,Task_chain>,Time>>
+				TCD<Time> tc_init;
+				Time initial_value = 0;
+				
+				for(Task_chain<Time>& tc:TC_set){
+					tc_init.EST_prev.emplace_back(initial_value);
+					tc_init.DA_max.emplace_back(initial_value);
+					tc_init.RT_max.emplace_back(initial_value);
+					tc_init.z_min.emplace_back(std::vector<Time>{});
+					tc_init.z_max.emplace_back(std::vector<Time>{});
+					tc_init.input_job_index.emplace_back(std::vector<size_t>{});
+					for(Task<Time>& task:tc.get_tasks()){
+						tc_init.z_min[tc.get_id()].emplace_back(initial_value);
+						tc_init.z_max[tc.get_id()].emplace_back(initial_value);
+						tc_init.input_job_index[tc.get_id()].emplace_back(0);
+					}
+				}
+				return tc_init;
+			}
+
+			void update_task_chain_data(const Schedule_state& from,
+				Job_index& idx, const State_space_data<Time>& state_space_data, Time EST, Time LST, Time EFT, Time LFT){
+					std::vector<Job<Time>> jobs = state_space_data.jobs;
+					std::vector<Task_chain<Time>> TC_set = state_space_data.get_task_chains();
+					Job<Time> j = jobs[idx];
+					Task<Time> tau_j = Task<Time>(j.get_id().task);
+					tc_data = from.tc_data;
+					
+					for (auto& tc:TC_set){
+						auto t = tc.get_tasks();
+						auto task_iter = std::find(t.begin(), t.end(), tau_j);
+						auto pred_task_iter = std::prev(task_iter);
+						bool is_source = (task_iter == t.begin());
+						bool is_sink = (task_iter == std::prev(t.end()));
+						
+						if(is_source) tc_data.EST_prev[tc.get_id()] = EST;
+
+						if(std::find(t.begin(), t.end(), tau_j) != t.end()){
+							std::size_t index = tc.get_task_index(t, task_iter);
+							if(is_source){
+								tc_data.z_min[tc.get_id()][index] = tc.get_inputtype() == "event" ? from.tc_data.EST_prev[tc.get_id()] : EST;
+								tc_data.z_max[tc.get_id()][index] = LST;
+								tc_data.input_job_index[tc.get_id()][index] = idx;
+							}
+							else{
+								tc_data.z_min[tc.get_id()][index] = from.tc_data.z_min[tc.get_id()][tc.get_task_index(t,pred_task_iter)];
+								tc_data.z_max[tc.get_id()][index] = from.tc_data.z_max[tc.get_id()][tc.get_task_index(t,pred_task_iter)];
+								tc_data.input_job_index[tc.get_id()][index] = from.tc_data.input_job_index[tc.get_id()][tc.get_task_index(t,pred_task_iter)];
+							}
+							// If a different source job is used
+							//bool based_on_new_input = (from.tc_data.input_job_index[tc.get_id()][index]!=tc_data.input_job_index[tc.get_id()][index]);
+							
+							//If the input interval is different
+							bool based_on_new_input = (from.tc_data.z_min[tc.get_id()][index]!=tc_data.z_min[tc.get_id()][index]|| from.tc_data.z_max[tc.get_id()][index]!=tc_data.z_max[tc.get_id()][index]);
+							//Time data_age, reaction_time;
+							if(is_sink){
+								Time data_age = LFT-from.tc_data.z_min[tc.get_id()][index];
+								state_space_data.submit_data_age(tc.get_id(),data_age);
+								tc_data.DA_max[tc.get_id()] = std::max(tc_data.DA_max.at(tc.get_id()), data_age);
+								if(based_on_new_input){
+									Time reaction_time = LFT-tc_data.z_min[tc.get_id()][index];
+									state_space_data.submit_reaction_time(tc.get_id(),reaction_time);
+									tc_data.RT_max[tc.get_id()] = std::max(tc_data.RT_max.at(tc.get_id()), reaction_time);
+								}
+								
+							}
+							
+						}
+						
+					}
+				}
+
+
 
 			// no accidental copies
 			Schedule_state(const Schedule_state& origin) = delete;

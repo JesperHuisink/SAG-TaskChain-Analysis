@@ -35,6 +35,7 @@ namespace NP {
 			typedef const Job<Time>* Job_ref;
 			typedef std::vector<Job_index> Job_precedence_set;
 			typedef std::vector<std::pair<Job_ref, Interval<Time>>> Suspensions_list;
+			typedef std::vector<Task_chain<Time>> Task_chain_set;
 
 		private:
 			typedef std::multimap<Time, Job_ref> By_time_map;
@@ -68,10 +69,13 @@ namespace NP {
 			const std::vector<Job_precedence_set>& predecessors;
 			const std::vector<Suspensions_list>& predecessors_suspensions;
 			const std::vector<Suspensions_list>& successors_suspensions;
-
+			const Task_chain_set& task_chains;
+			Task_chain_result<Time>& task_chain_result;
 			State_space_data(const Workload& jobs,
 				const Precedence_constraints& edges,
 				const Abort_actions& aborts,
+				const Task_chain_set& task_chains,
+				Task_chain_result<Time>& task_chain_result,
 				unsigned int num_cpus)
 				: jobs(jobs)
 				, num_cpus(num_cpus)
@@ -87,6 +91,8 @@ namespace NP {
 				, predecessors_suspensions(_predecessors_suspensions)
 				, successors_suspensions(_successors_suspensions)
 				, abort_actions(jobs.size(), NULL)
+				, task_chains(task_chains)
+				, task_chain_result(task_chain_result)
 			{
 				for (const auto& e : edges) {
 					_predecessors_suspensions[e.get_toIndex()].push_back({ &jobs[e.get_fromIndex()], e.get_suspension() });
@@ -113,6 +119,12 @@ namespace NP {
 					const Job<Time>& j = lookup<Time>(jobs, a.get_id());
 					abort_actions[j.get_job_index()] = &a;
 				}
+
+				for (auto tc: task_chains){
+					task_chain_result.data_ages.push_back(std::vector<Time>{});
+					task_chain_result.reaction_times.push_back(std::vector<Time>{});
+				}
+
 			}
 
 			size_t num_jobs() const
@@ -458,6 +470,18 @@ namespace NP {
 					return Time_model::constants<Time>::infinity();
 				else
 					return gang_source_jobs_by_latest_arrival.begin()->first;
+			}
+
+			std::vector<Task_chain<Time>> get_task_chains() const
+			{
+				return task_chains;
+			}
+
+			void submit_data_age(unsigned long tc_id, Time DA) const {
+				task_chain_result.data_ages[tc_id].push_back(DA);
+			}
+			void submit_reaction_time(unsigned long tc_id, Time RT) const {
+				task_chain_result.reaction_times[tc_id].push_back(RT);
 			}
 
 		private:

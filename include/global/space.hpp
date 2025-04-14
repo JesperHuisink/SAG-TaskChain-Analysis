@@ -51,7 +51,7 @@ namespace NP {
 				if (opts.verbose)
 					std::cout << "Starting" << std::endl;
 
-				State_space* s = new State_space(prob.jobs, prob.prec, prob.aborts, prob.num_processors, 
+				State_space* s = new State_space(prob.jobs, prob.prec, prob.aborts, prob.task_chains, prob.num_processors, 
 					{ opts.merge_conservative, opts.merge_use_job_finish_times, opts.merge_depth }, opts.timeout, opts.max_depth, opts.early_exit, opts.verbose);
 				s->be_naive = opts.be_naive;
 				if (opts.verbose)
@@ -138,6 +138,15 @@ namespace NP {
 			double get_cpu_time() const
 			{
 				return cpu_time;
+			}
+
+			Time get_max_data_age(unsigned long tc_id){
+				auto m = std::max_element(task_chain_result.data_ages[tc_id].begin(),task_chain_result.data_ages[tc_id].end());
+				return m==task_chain_result.data_ages[tc_id].end()?777:*m;
+			}
+			Time get_max_reaction_time(unsigned long tc_id){
+				auto m = std::max_element(task_chain_result.reaction_times[tc_id].begin(),task_chain_result.reaction_times[tc_id].end());
+				return m==task_chain_result.reaction_times[tc_id].end()?777:*m;
 			}
 
 			typedef std::deque<Node> Nodes;
@@ -287,18 +296,22 @@ namespace NP {
 			const double timeout;
 			const unsigned int num_cpus;
 
+			Task_chain_result<Time> task_chain_result;
+
 			State_space_data<Time> state_space_data;
 
 			State_space(const Workload& jobs,
 				const Precedence_constraints& edges,
 				const Abort_actions& aborts,
+				const std::vector<Task_chain<Time>>& task_chains,
 				unsigned int num_cpus,
 				Merge_options merge_options,
 				double max_cpu_time = 0,
 				unsigned int max_depth = 0,
 				bool early_exit = true,
 				bool verbose = false)
-				: state_space_data(jobs, edges, aborts, num_cpus)
+				: task_chain_result{}
+				, state_space_data(jobs, edges, aborts, task_chains, task_chain_result, num_cpus)
 				, aborted(false)
 				, timed_out(false)
 				, observed_deadline_miss(false)
@@ -316,6 +329,7 @@ namespace NP {
 				, current_job_count(0)
 				, num_cpus(num_cpus)
 				, early_exit(early_exit)
+				//, task_chain_result(task_chain_result)
 #ifdef CONFIG_PARALLEL
 				, partial_rta(jobs.size())
 #endif

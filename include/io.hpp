@@ -8,6 +8,7 @@
 #include "time.hpp"
 #include "jobs.hpp"
 #include "precedence.hpp"
+#include "taskchain.hpp"
 #include "aborts.hpp"
 #include "yaml-cpp/yaml.h"
 
@@ -337,6 +338,49 @@ namespace NP {
 		}
 
 		return abort_actions;
+	}
+
+	//Functions that help parse the task chains file
+	template<class Time>
+	Task_chain<Time> parse_task_chain(std::istream &in){
+
+	}
+
+	template<class Time>
+	std::vector<Task_chain<Time>> parse_yaml_task_chain_file(std::istream& in)
+	{
+		//typename Task_chain<Time>::Task_chain_set taskchains;
+		std::vector<Task_chain<Time>> taskchains;
+        std::vector<unsigned long> task_ids;
+		std::vector<Task<Time>> tasks;
+		std::vector<std::string> buffers;
+		
+		try {
+			YAML::Node input_tc_set = YAML::Load(in);
+			auto const TCs = input_tc_set["taskchains"];
+			unsigned long chain_id = 0;
+			for (auto const &tc: TCs) {
+				task_ids = tc["Tasks"].as<std::vector<unsigned long>>();
+				//for (auto t:task_ids) std::cout<<t<<std::endl; // debug
+				tasks.clear();
+				for (auto i:task_ids){
+					tasks.push_back(Task<Time>(i));
+					//std::cout<<i<<std::endl;
+				}
+				auto buffers = tc["Buffers"].as<std::vector<std::string>>();
+				//std::cout<<"Buffers inited"<<std::endl;
+				auto inputtype = tc["InputType"].as<std::string>();
+				//std::cout<<"InputType inited"<<std::endl;
+
+				taskchains.push_back(Task_chain<Time>(tasks, buffers, inputtype, chain_id));
+				//std::cout<<"Task chain pushed to vector"<<std::endl;
+				chain_id++;
+			}
+		} catch (const YAML::Exception& e) {
+			std::cerr << "Error reading YAML file: " << e.what() << std::endl;
+		}
+
+		return taskchains;
 	}
 
 

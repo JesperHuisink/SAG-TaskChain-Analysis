@@ -1,0 +1,16 @@
+taskgraph:
+  - Task ID: 1
+    Is Source: True
+    Is Sink: False
+    Successors:
+      - Task ID: 2
+        Buffer: blackboard
+  - Task ID: 2
+    Is Source: False
+    Is Sink: False
+    Successors:
+      - Task ID: 2
+        Buffer: FIFO(1)
+  - Task ID: 3
+    Is Source: False
+    Is Sink: True

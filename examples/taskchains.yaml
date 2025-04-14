@@ -1,0 +1,4 @@
+taskchains:
+  - Tasks: [1, 2, 3]
+    Buffers: [BB, BB]
+    InputType: event
