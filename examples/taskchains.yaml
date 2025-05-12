@@ -1,4 +1,7 @@
 taskchains:
-  - Tasks: [1, 2, 3]
-    Buffers: [BB, BB]
-    InputType: event
+- Tasks:
+  - 1
+  - 2
+  Buffers:
+  - BB
+  InputType: event

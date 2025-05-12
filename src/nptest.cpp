@@ -163,7 +163,7 @@ static Analysis_result analyze(
 		DA_RT_stream << "Task chain id, max data age, max reaction time"<<std::endl;
 		for (unsigned long i=0;i<task_chains.size();i++){
 			DA_RT_stream<<i<<", "<<space->get_max_data_age(i)
-							<<", "<<space->get_max_reaction_time(i);
+							<<", "<<space->get_max_reaction_time(i)<<std::endl;
 		}
 	}
 

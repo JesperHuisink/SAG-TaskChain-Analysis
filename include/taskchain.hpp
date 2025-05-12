@@ -5,9 +5,8 @@
 
 namespace NP{
     template<class Time> struct TCD{
-        std::vector<Time> EST_prev, DA_max, RT_max;
-        std::vector<std::vector<Time>> z_min,z_max;
-        std::vector<std::vector<size_t>> input_job_index;
+        std::vector<Time> DA_max, RT_max; // per task chain
+        std::vector<std::vector<Time>> EST_prev, EIT_Reac, EIT_Age, LIT; // per task per task chain
     };
 
     template<class Time>
