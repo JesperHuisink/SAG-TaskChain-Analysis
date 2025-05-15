@@ -259,20 +259,22 @@ namespace NP {
 				for(int i=0;i<tc_data.EST_prev.size();i++){
 					tc_data.DA_max[i] = std::max(tc_data.DA_max[i],tc_data_other.DA_max[i]);
 					tc_data.RT_max[i] = std::max(tc_data.RT_max[i],tc_data_other.RT_max[i]);
-					for(int j=0;j<tc_data.EST_prev[i].size();j++){
-						if(tc_data.EST_prev[i][j]!=INVALID && tc_data_other.EST_prev[i][j]!=INVALID) tc_data.EST_prev[i][j]=std::min(tc_data.EST_prev[i][j],tc_data_other.EST_prev[i][j]);
-						else if(tc_data.EST_prev[i][j]==INVALID && tc_data_other.EST_prev[i][j]!=INVALID) tc_data.EST_prev[i][j]=tc_data_other.EST_prev[i][j];
 
+					if(tc_data.EST_prev[i]==INVALID && tc_data_other.EST_prev[i]!=INVALID) tc_data.EST_prev[i]=tc_data_other.EST_prev[i];
+					if(tc_data.EST_prev[i]!=INVALID && tc_data_other.EST_prev[i]!=INVALID) tc_data.EST_prev[i]=std::min(tc_data.EST_prev[i],tc_data_other.EST_prev[i]);
+
+					for(int j=0;j<tc_data.EIT_Age[i].size();j++){
 						if(tc_data.EIT_Age[i][j]!=INVALID && tc_data_other.EIT_Age[i][j]!=INVALID) tc_data.EIT_Age[i][j] = std::min(tc_data.EIT_Age[i][j],tc_data_other.EIT_Age[i][j]);
-						else if(tc_data.EIT_Age[i][j]==INVALID && tc_data_other.EIT_Age[i][j]!=INVALID) tc_data.EIT_Age[i][j] = tc_data_other.EIT_Age[i][j];
+						if(tc_data.EIT_Age[i][j]==INVALID && tc_data_other.EIT_Age[i][j]!=INVALID) tc_data.EIT_Age[i][j] = tc_data_other.EIT_Age[i][j];
 
 						if(tc_data.EIT_Reac[i][j]!=INVALID && tc_data_other.EIT_Reac[i][j]!=INVALID) tc_data.EIT_Reac[i][j] = std::min(tc_data.EIT_Reac[i][j],tc_data_other.EIT_Reac[i][j]);
-						else if(tc_data.EIT_Reac[i][j]==INVALID && tc_data_other.EIT_Reac[i][j]!=INVALID) tc_data.EIT_Reac[i][j] = tc_data_other.EIT_Reac[i][j];
+						if(tc_data.EIT_Reac[i][j]==INVALID && tc_data_other.EIT_Reac[i][j]!=INVALID) tc_data.EIT_Reac[i][j] = tc_data_other.EIT_Reac[i][j];
 						
-						if(tc_data_other.LIT[i][j]==INVALID || tc_data.LIT[i][j]==INVALID) tc_data.LIT[i][j]==INVALID;
-						else tc_data.LIT[i][j] = std::max(tc_data.LIT[i][j],tc_data_other.LIT[i][j]);
+						//if(tc_data_other.LIT[i][j]==INVALID || tc_data.LIT[i][j]==INVALID) tc_data.LIT[i][j]==INVALID;
+						//else tc_data.LIT[i][j] = std::max(tc_data.LIT[i][j],tc_data_other.LIT[i][j]);
 					}
 				} // end task chain merge
+				 
 
 				for (int i = 0; i < core_avail.size(); i++)
 					core_avail[i] |= cav[i];
@@ -344,9 +346,9 @@ namespace NP {
 				
 				for(int i=0;i<tc_data.EST_prev.size();i++){ // for task chain i
 					out << "\nTaskchain " << i <<std::endl;
-					out << "max DA: " << tc_data.DA_max[i]<<", max RT: "<<tc_data.RT_max[i]<<std::endl;
-					for(int j=0;j<tc_data.EST_prev[i].size();j++){ // for task j in chain i
-						out << "EIT_Age_"<<j<<" = "<<tc_data.EIT_Age[i][j]<< ", EIT_Reac_"<<j<<" = "<<tc_data.EIT_Reac[i][j]<<", EST_prev_"<<j<<" = "<<tc_data.EST_prev[i][j]<<std::endl;
+					out << "max DA: " << tc_data.DA_max[i]<<", max RT: "<<tc_data.RT_max[i]<<", EST_prev: "<<tc_data.EST_prev[i]<<std::endl;
+					for(int j=0;j<tc_data.EIT_Age[i].size();j++){ // for task j in chain i
+						out << "EIT_Age_"<<j<<" = "<<tc_data.EIT_Age[i][j]<< ", EIT_Reac_"<<j<<" = "<<tc_data.EIT_Reac[i][j]<<std::endl;
 					}
 				}
 					
@@ -651,13 +653,13 @@ namespace NP {
 				for(Task_chain<Time>& tc:TC_set){
 					tc_init.DA_max.emplace_back(initial_value);
 					tc_init.RT_max.emplace_back(initial_value);
-					tc_init.EST_prev.emplace_back(std::vector<Time>{});
+					tc_init.EST_prev.emplace_back(initial_value);
 					tc_init.EIT_Age.emplace_back(std::vector<Time>{});
 					tc_init.EIT_Reac.emplace_back(std::vector<Time>{});
 					for(Task<Time>& task:tc.get_tasks()){
-						tc_init.EIT_Reac[tc.get_id()].emplace_back(initial_value);
+						tc_init.EIT_Reac[tc.get_id()].emplace_back(INVALID);
 						tc_init.EIT_Age[tc.get_id()].emplace_back(initial_value);
-						tc_init.EST_prev[tc.get_id()].emplace_back(initial_value);
+						//tc_init.EST_prev[tc.get_id()].emplace_back(initial_value);
 					}
 				}
 				return tc_init;
@@ -670,7 +672,7 @@ namespace NP {
 					Job<Time> j = jobs[idx];
 					Task<Time> tau_j = Task<Time>(j.get_id().task);
 					tc_data = from.tc_data;
-					
+
 					for (auto& tc:TC_set){
 						auto t = tc.get_tasks();
 						auto task_iter = std::find(t.begin(), t.end(), tau_j);
@@ -678,7 +680,7 @@ namespace NP {
 						bool is_source = (task_iter == t.begin());
 						bool is_sink = (task_iter == std::prev(t.end()));
 						
-
+/*
 						if(std::find(t.begin(), t.end(), tau_j) != t.end()){
 							std::size_t index = tc.get_task_index(t, task_iter);
 							if(is_source){
@@ -706,12 +708,15 @@ namespace NP {
 							}
 
 							if(is_sink){
-								Time data_age = LFT-from.tc_data.EIT_Age[tc.get_id()][index];
+								Time data_age = tc.get_outputtype()=="active" ?
+										LFT-tc_data.EIT_Age[tc.get_id()][index] : LFT-from.tc_data.EIT_Age[tc.get_id()][index];
 								state_space_data.submit_data_age(tc.get_id(),data_age);
+								//std::cout<<"Data age found: "<<data_age<<std::endl;
 								tc_data.DA_max[tc.get_id()] = std::max(tc_data.DA_max.at(tc.get_id()), data_age);
 								if(tc_data.EIT_Reac[tc.get_id()][index]!=INVALID){
 									Time reaction_time = LFT-tc_data.EIT_Reac[tc.get_id()][index];
 									state_space_data.submit_reaction_time(tc.get_id(),reaction_time);
+									//std::cout<<"Reaction time found: "<<reaction_time<<std::endl;
 									tc_data.RT_max[tc.get_id()] = std::max(tc_data.RT_max.at(tc.get_id()), reaction_time);
 									tc_data.EIT_Reac[tc.get_id()][index]=INVALID;
 								}
@@ -719,7 +724,43 @@ namespace NP {
 							}
 							
 						}
-						
+*/						
+						if(std::find(t.begin(), t.end(), tau_j) != t.end()){
+							std::size_t index = tc.get_task_index(t, task_iter);
+							
+							tc_data.EST_prev[tc.get_id()] = is_source ? EST:from.tc_data.EST_prev[tc.get_id()];
+
+							tc_data.EIT_Age[tc.get_id()][index] = is_source ?
+									(tc.get_inputtype()=="event" ? from.tc_data.EST_prev[tc.get_id()] : EST)
+									: from.tc_data.EIT_Age[tc.get_id()][tc.get_task_index(t,pred_task_iter)];
+
+							tc_data.EIT_Reac[tc.get_id()][index] = from.tc_data.EIT_Reac[tc.get_id()][index]==INVALID ?
+									(is_source ?
+										(tc.get_inputtype()=="event" ?
+												from.tc_data.EST_prev[tc.get_id()] : EST)
+										: from.tc_data.EIT_Reac[tc.get_id()][tc.get_task_index(t,pred_task_iter)])
+									: from.tc_data.EIT_Reac[tc.get_id()][index];
+
+							if(!is_source) tc_data.EIT_Reac[tc.get_id()][tc.get_task_index(t,pred_task_iter)] = from.tc_data.EIT_Reac[tc.get_id()][index]!=INVALID?
+										from.tc_data.EIT_Reac[tc.get_id()][tc.get_task_index(t,pred_task_iter)] : INVALID;
+
+							if(is_sink){
+								Time data_age = tc.get_outputtype()=="active" ?
+										LFT-tc_data.EIT_Age[tc.get_id()][index] : LFT-from.tc_data.EIT_Age[tc.get_id()][index];
+								state_space_data.submit_data_age(tc.get_id(),data_age);
+								//std::cout<<"Data age found: "<<data_age<<std::endl;
+								tc_data.DA_max[tc.get_id()] = std::max(tc_data.DA_max.at(tc.get_id()), data_age);
+								if(tc_data.EIT_Reac[tc.get_id()][index]!=INVALID){
+									Time reaction_time = LFT-tc_data.EIT_Reac[tc.get_id()][index];
+									state_space_data.submit_reaction_time(tc.get_id(),reaction_time);
+									//std::cout<<"Reaction time found: "<<reaction_time<<std::endl;
+									tc_data.RT_max[tc.get_id()] = std::max(tc_data.RT_max.at(tc.get_id()), reaction_time);
+									tc_data.EIT_Reac[tc.get_id()][index]=INVALID;
+								}
+								
+							}
+							
+						}
 					}
 				}
 

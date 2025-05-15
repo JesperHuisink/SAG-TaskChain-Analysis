@@ -5,8 +5,8 @@
 
 namespace NP{
     template<class Time> struct TCD{
-        std::vector<Time> DA_max, RT_max; // per task chain
-        std::vector<std::vector<Time>> EST_prev, EIT_Reac, EIT_Age, LIT; // per task per task chain
+        std::vector<Time> DA_max, RT_max, EST_prev; // per task chain
+        std::vector<std::vector<Time>> EIT_Reac, EIT_Age, LIT; // per task per task chain
     };
 
     template<class Time>
@@ -56,15 +56,16 @@ namespace NP{
         private:
         std::vector<Task<Time>> tasks;
         std::vector<std::string> buffers;
-        std::string inputtype;
+        std::string inputtype, outputtype;
         const unsigned long id;
         public:
             Task_chain(
                 std::vector<Task<Time>> tasks,
                 std::vector<std::string> buffers,
                 std::string inputtype,
+                std::string outputtype,
                 unsigned long id)
-                : tasks(tasks), buffers(buffers), inputtype(inputtype), id(id)
+                : tasks(tasks), buffers(buffers), inputtype(inputtype), outputtype(outputtype), id(id)
             {
                 //
             }
@@ -76,6 +77,9 @@ namespace NP{
             }
             std::string get_inputtype(){
                 return inputtype;
+            }
+            std::string get_outputtype(){
+                return outputtype;
             }
             const unsigned long get_id() const {
                 return id;

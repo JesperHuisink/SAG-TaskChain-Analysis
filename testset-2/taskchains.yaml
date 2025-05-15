@@ -1,0 +1,101 @@
+taskchains:
+- Tasks:
+  - 22
+  - 35
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 1
+  - 2
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 33
+  - 3
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 20
+  - 21
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 35
+  - 32
+  - 33
+  - 22
+  - 12
+  - 24
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 6
+  - 10
+  - 14
+  - 36
+  - 2
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 9
+  - 40
+  - 1
+  - 31
+  - 21
+  - 27
+  - 20
+  - 34
+  - 6
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 34
+  - 11
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 12
+  - 4
+  - 13
+  Buffers:
+  - BB
+  - BB
+  InputType: samp
+  OutputType: active
+- Tasks:
+  - 1
+  - 5
+  Buffers:
+  - BB
+  InputType: samp
+  OutputType: active

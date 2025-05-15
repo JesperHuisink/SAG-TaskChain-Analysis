@@ -370,9 +370,10 @@ namespace NP {
 				auto buffers = tc["Buffers"].as<std::vector<std::string>>();
 				//std::cout<<"Buffers inited"<<std::endl;
 				auto inputtype = tc["InputType"].as<std::string>();
+				auto outputtype = tc["OutputType"].as<std::string>();
 				//std::cout<<"InputType inited"<<std::endl;
 
-				taskchains.push_back(Task_chain<Time>(tasks, buffers, inputtype, chain_id));
+				taskchains.push_back(Task_chain<Time>(tasks, buffers, inputtype, outputtype, chain_id));
 				//std::cout<<"Task chain pushed to vector"<<std::endl;
 				chain_id++;
 			}

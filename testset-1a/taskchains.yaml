@@ -1,0 +1,12 @@
+taskchains:
+- Tasks:
+  - 0
+  - 34
+  - 19
+  - 32
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: samp
+  OutputType: active
