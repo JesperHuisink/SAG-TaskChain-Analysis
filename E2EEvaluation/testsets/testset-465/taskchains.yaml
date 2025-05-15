@@ -1,0 +1,407 @@
+taskchains:
+- Tasks:
+  - 51
+  - 46
+  - 25
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 47
+  - 57
+  - 3
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 54
+  - 55
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 25
+  - 51
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 5
+  - 59
+  - 1
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 36
+  - 10
+  - 21
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 3
+  - 57
+  - 47
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 51
+  - 25
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 49
+  - 44
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 47
+  - 57
+  - 3
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 29
+  - 62
+  - 8
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 60
+  - 55
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 34
+  - 0
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 8
+  - 29
+  - 62
+  - 31
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 36
+  - 22
+  - 53
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 43
+  - 36
+  - 21
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 47
+  - 3
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 57
+  - 3
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 44
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 62
+  - 31
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 36
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 51
+  - 25
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 31
+  - 62
+  - 29
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 2
+  - 20
+  - 4
+  - 42
+  - 10
+  - 45
+  - 16
+  - 49
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 9
+  - 58
+  - 30
+  - 50
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 45
+  - 16
+  - 43
+  - 49
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 2
+  - 27
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 60
+  - 55
+  - 24
+  - 6
+  - 15
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 25
+  - 51
+  - 46
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 49
+  - 43
+  - 22
+  - 14
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 29
+  - 31
+  - 62
+  - 8
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 46
+  - 57
+  - 47
+  - 55
+  - 51
+  - 25
+  - 11
+  - 3
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 57
+  - 3
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 7
+  - 39
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 43
+  - 14
+  - 21
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 42
+  - 9
+  - 48
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 3
+  - 47
+  - 31
+  - 29
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 41
+  - 60
+  - 56
+  - 54
+  - 18
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 47
+  - 23
+  - 25
+  - 3
+  - 21
+  - 37
+  - 51
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 46
+  - 25
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 3
+  - 57
+  - 47
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 37
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 17
+  - 13
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 8
+  - 62
+  - 31
+  - 29
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 29
+  - 31
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 27
+  - 58
+  - 23
+  - 18
+  - 14
+  - 35
+  - 60
+  - 48
+  - 61
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 55
+  - 18
+  - 6
+  - 54
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event

@@ -1,0 +1,413 @@
+taskchains:
+- Tasks:
+  - 22
+  - 56
+  - 40
+  - 6
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 33
+  - 41
+  - 60
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 82
+  - 16
+  - 51
+  - 57
+  - 44
+  - 73
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 38
+  - 27
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 51
+  - 44
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 75
+  - 38
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 45
+  - 82
+  - 8
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 12
+  - 74
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 51
+  - 44
+  - 67
+  - 42
+  - 82
+  - 8
+  - 35
+  - 62
+  - 45
+  - 69
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 75
+  - 38
+  - 27
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 38
+  - 75
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 71
+  - 81
+  - 62
+  - 64
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 20
+  - 40
+  - 27
+  - 23
+  - 75
+  - 2
+  - 71
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 75
+  - 38
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 38
+  - 75
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 5
+  - 75
+  - 69
+  - 47
+  - 38
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 43
+  - 30
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 48
+  - 3
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 5
+  - 43
+  - 65
+  - 29
+  - 58
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 53
+  - 50
+  - 11
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 82
+  - 45
+  - 51
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 23
+  - 62
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 7
+  - 24
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 10
+  - 25
+  - 4
+  - 15
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 80
+  - 84
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 12
+  - 26
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 78
+  - 65
+  - 47
+  - 5
+  - 32
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 12
+  - 26
+  - 74
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 74
+  - 26
+  - 12
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 31
+  - 58
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 1
+  - 66
+  - 3
+  - 46
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 69
+  - 9
+  - 31
+  - 5
+  - 13
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 4
+  - 66
+  - 46
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 73
+  - 44
+  - 51
+  - 45
+  - 8
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 8
+  - 73
+  - 44
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 38
+  - 75
+  - 73
+  - 82
+  - 27
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 24
+  - 73
+  - 35
+  - 22
+  - 32
+  - 7
+  - 44
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 67
+  - 77
+  - 68
+  - 37
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 7
+  - 24
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 45
+  - 73
+  - 44
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 15
+  - 28
+  - 53
+  - 50
+  - 83
+  - 84
+  - 66
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 82
+  - 44
+  - 65
+  - 56
+  - 30
+  - 51
+  - 69
+  - 45
+  - 9
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 75
+  - 27
+  - 38
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 43
+  - 13
+  - 5
+  Buffers:
+  - BB
+  - BB
+  InputType: event

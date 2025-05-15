@@ -1,0 +1,51 @@
+% This file was created with tikzplotlib v0.10.1.post9.
+\begin{tikzpicture}
+
+\definecolor{lightgrey}{RGB}{211,211,211}
+
+\begin{axis}[
+tick align=outside,
+tick pos=left,
+xmin=0.5, xmax=1.5,
+y grid style={lightgrey},
+ymajorgrids,
+ymin=-196.655177822016, ymax=4224.446542772,
+yminorgrids,
+ytick style={color=black}
+]
+\addplot [ultra thick, blue]
+table {%
+0.925 72.6343878262339
+1.075 72.6343878262339
+1.075 341.865989743688
+0.925 341.865989743688
+0.925 72.6343878262339
+};
+\addplot [ultra thick, black]
+table {%
+1 72.6343878262339
+1 4.30399129589401
+};
+\addplot [ultra thick, black]
+table {%
+1 341.865989743688
+1 4023.48737365409
+};
+\addplot [ultra thick, black]
+table {%
+0.9625 4.30399129589401
+1.0375 4.30399129589401
+};
+\addplot [ultra thick, black]
+table {%
+0.9625 4023.48737365409
+1.0375 4023.48737365409
+};
+\addplot [ultra thick, red]
+table {%
+0.925 121.401366451599
+1.075 121.401366451599
+};
+\end{axis}
+
+\end{tikzpicture}

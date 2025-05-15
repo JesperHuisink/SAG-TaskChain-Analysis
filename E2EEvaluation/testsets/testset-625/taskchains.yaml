@@ -1,0 +1,407 @@
+taskchains:
+- Tasks:
+  - 34
+  - 31
+  - 15
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 3
+  - 11
+  - 56
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 81
+  - 24
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 63
+  - 37
+  - 32
+  - 64
+  - 10
+  - 26
+  - 82
+  - 23
+  - 38
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 57
+  - 62
+  - 23
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 85
+  - 57
+  - 0
+  - 47
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 2
+  - 21
+  - 18
+  - 9
+  - 73
+  - 61
+  - 36
+  - 24
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 15
+  - 33
+  - 31
+  - 50
+  - 7
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 46
+  - 51
+  - 76
+  - 54
+  - 38
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 39
+  - 5
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 16
+  - 69
+  - 82
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 37
+  - 50
+  - 31
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 38
+  - 54
+  - 66
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 83
+  - 36
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 65
+  - 55
+  - 21
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 37
+  - 50
+  - 7
+  - 31
+  - 53
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 74
+  - 80
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 86
+  - 59
+  - 80
+  - 72
+  - 17
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 10
+  - 34
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 50
+  - 37
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 85
+  - 0
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 83
+  - 30
+  - 14
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 20
+  - 12
+  - 81
+  - 14
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 56
+  - 11
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 37
+  - 50
+  - 15
+  - 10
+  - 34
+  - 46
+  - 26
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 75
+  - 25
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 14
+  - 59
+  - 40
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 65
+  - 52
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 25
+  - 75
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 56
+  - 25
+  - 75
+  - 11
+  - 3
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 68
+  - 0
+  - 19
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 12
+  - 86
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 8
+  - 38
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 13
+  - 78
+  - 57
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 51
+  - 2
+  - 18
+  - 46
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 24
+  - 33
+  - 51
+  - 9
+  - 49
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 45
+  - 72
+  - 12
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 15
+  - 10
+  - 31
+  - 50
+  - 34
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 16
+  - 62
+  Buffers:
+  - BB
+  InputType: event
+- Tasks:
+  - 56
+  - 13
+  - 11
+  - 3
+  - 16
+  - 44
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 61
+  - 45
+  - 30
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 11
+  - 56
+  - 3
+  - 38
+  - 71
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 65
+  - 17
+  - 36
+  Buffers:
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 45
+  - 55
+  - 81
+  - 21
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: event
+- Tasks:
+  - 10
+  - 50
+  Buffers:
+  - BB
+  InputType: event
