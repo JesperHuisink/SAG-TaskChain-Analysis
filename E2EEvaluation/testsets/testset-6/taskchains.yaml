@@ -1,467 +1,234 @@
 taskchains:
 - Tasks:
-  - 45
-  - 16
+  - 38
+  - 52
+  - 44
+  - 58
+  - 60
+  - 3
   Buffers:
   - BB
-  InputType: event
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 32
+  - 30
+  - 67
+  - 47
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 51
+  - 23
+  - 42
+  - 28
+  Buffers:
+  - BB
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 25
+  - 9
+  - 23
+  - 17
+  - 28
+  Buffers:
+  - BB
+  - BB
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 53
+  - 45
+  Buffers:
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 47
+  - 6
+  - 66
+  Buffers:
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 53
+  - 69
+  - 2
+  Buffers:
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
 - Tasks:
   - 23
-  - 16
-  - 43
-  - 2
-  - 28
-  - 39
+  - 17
   Buffers:
   - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 34
-  - 49
-  - 3
-  - 37
-  - 9
-  - 43
-  - 46
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 52
   - 41
+  - 14
+  - 27
+  - 13
   Buffers:
   - BB
-  InputType: event
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 22
-  - 59
+  - 63
+  - 0
   Buffers:
   - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 52
-  - 15
-  - 11
+  - 17
   - 51
   Buffers:
   - BB
-  - BB
-  - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 22
-  - 27
-  - 38
+  - 63
   - 0
-  - 23
-  - 28
-  - 40
+  Buffers:
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 57
+  - 9
+  - 25
   Buffers:
   - BB
   - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 1
+  - 33
+  - 32
+  - 37
+  Buffers:
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
   - 42
-  - 27
-  - 35
+  - 51
+  Buffers:
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 9
+  - 25
+  - 57
   Buffers:
   - BB
   - BB
-  - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
+  - 33
   - 52
+  Buffers:
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
   - 10
+  - 46
   - 55
   Buffers:
   - BB
   - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 22
-  - 49
-  - 46
-  - 37
-  Buffers:
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 38
-  - 14
-  - 54
-  - 8
-  Buffers:
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 36
-  - 49
-  - 40
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 23
   - 25
-  - 38
-  - 27
-  Buffers:
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 22
-  - 37
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 16
-  - 45
-  - 2
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 24
-  - 13
-  - 30
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 6
-  - 41
-  - 60
-  - 20
-  - 33
-  - 47
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 44
-  - 30
-  - 7
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 0
-  - 1
+  - 9
+  - 71
+  - 48
   - 14
   Buffers:
   - BB
   - BB
-  InputType: event
-- Tasks:
-  - 15
-  - 11
-  - 33
-  Buffers:
   - BB
   - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 34
-  - 9
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 53
-  - 20
-  - 58
-  - 44
+  - 31
+  - 40
+  - 35
+  - 14
   Buffers:
   - BB
   - BB
   - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 51
   - 18
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 16
-  - 45
+  - 5
   - 2
+  - 58
+  - 52
   Buffers:
   - BB
   - BB
-  InputType: event
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
 - Tasks:
-  - 26
-  - 20
-  - 7
+  - 72
+  - 55
+  Buffers:
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 11
+  - 39
+  - 36
+  Buffers:
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 3
+  - 64
+  - 43
+  Buffers:
+  - BB
+  - BB
+  InputType: sampled
+  OutputType: active
+- Tasks:
+  - 27
   - 29
   Buffers:
   - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 47
-  - 26
-  - 30
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 1
-  - 25
-  - 8
-  - 0
-  Buffers:
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 46
-  - 33
-  - 40
-  - 18
-  - 22
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 33
-  - 60
-  - 6
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 34
-  - 9
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 1
-  - 42
-  - 38
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 12
-  - 45
-  - 16
-  - 33
-  - 2
-  - 6
-  - 26
-  - 11
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 16
-  - 2
-  - 45
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 2
-  - 45
-  - 16
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 42
-  - 25
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 5
-  - 7
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 34
-  - 9
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 16
-  - 45
-  - 2
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 22
-  - 37
-  - 46
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 11
-  - 21
-  - 56
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 46
-  - 22
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 54
-  - 23
-  - 31
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 9
-  - 34
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 37
-  - 59
-  - 40
-  - 36
-  - 22
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 31
-  - 27
-  - 54
-  - 14
-  - 1
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 37
-  - 40
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 45
-  - 2
-  - 16
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 50
-  - 7
-  - 47
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 16
-  - 45
-  Buffers:
-  - BB
-  InputType: event
-- Tasks:
-  - 10
-  - 56
-  - 21
-  - 3
-  - 33
-  Buffers:
-  - BB
-  - BB
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 36
-  - 46
-  - 40
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 0
-  - 38
-  - 35
-  Buffers:
-  - BB
-  - BB
-  InputType: event
-- Tasks:
-  - 45
-  - 2
-  - 16
-  Buffers:
-  - BB
-  - BB
-  InputType: event
+  InputType: sampled
+  OutputType: active

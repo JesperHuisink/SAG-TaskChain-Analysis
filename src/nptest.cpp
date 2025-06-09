@@ -137,7 +137,7 @@ static Analysis_result analyze(
 			    << j.get_job_id() << ", "
 			    << finish.from() << ", "
 			    << finish.until() << ", "
-			    << std::max<long long>(0,
+			    << std::max<Time>(0,
 			                           (finish.from() - j.earliest_arrival()))
 			    << ", "
 			    << (finish.until() - j.earliest_arrival())

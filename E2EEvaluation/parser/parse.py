@@ -87,6 +87,7 @@ def assign_edf_priority(job):
     return job.absolute_deadline
 
 def assign_TLFP_priority(tasks):
+    max_prio = max({task["Priority"] for task in tasks})
     return lambda j: next(task['Priority'] for task in tasks if task['TaskID'] == j.tid)
 
 def mk_rate_monotonic(tasks):
@@ -128,7 +129,7 @@ def main():
     for task in tasks:
         task['TaskID'] = task_ids.index(task['TaskID'])
 
-    write_taskset_csv(tasks)
+    write_taskset_csv(tasks, output_path+"taskset.csv")
     write_taskchains_yaml(chains, opts.InputType, opts.OutputType, output_path+'taskchains.yaml')
 
     Hg = hyperperiod(tasks)

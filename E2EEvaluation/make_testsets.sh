@@ -1,24 +1,56 @@
 #!/bin/bash
 
+POSITIONAL_ARGS=()
+
+outtype="active"
+intype="event"
+nr_sets=10
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -c|--count)
+      nr_sets="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -o|--OutputType)
+      outtype="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -i|--InputType)
+      intype="$2"
+      shift # past argument
+	  shift # past value
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 # Check if command is provided
 if [ -z "$1" ]; then
 	echo "Usage: $0 '<taskset_generation_command>'"
 	exit 1
 fi
-if [ -z "$2" ]; then
-	echo "Usage: $0 '<amount of tasksets to be created>'"
-	exit 1
-fi
+
 # Get command from first argument
 command="$1"
-
-# Nr of test sets generated
-nr_sets="$2"
 
 max_jobs=100 # Max concurrent generations
 job_count() {
     jobs -rp | wc -l
 }
+
+echo "Creating $nr_sets testsets using $intype input and $outtype output"
 
 # Create the parent folder
 parent_folder="testsets"
@@ -38,7 +70,7 @@ for ((i=1;i<=nr_sets; i++)); do
 	eval "$command -o $subfolder/cli_" || { echo "Command failed"; exit 1; }
 	#sleep 1
 	
-	eval "python3 ./parser/parse.py $subfolder/$file2 $subfolder"
+	eval "python3 ./parser/parse.py $subfolder/$file2 --out_path $subfolder/ --InputType $intype --OutputType $outtype --prio TLFP"
 	) &
 done
 

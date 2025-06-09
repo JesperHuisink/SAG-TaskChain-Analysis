@@ -1,0 +1,18 @@
+100 schedulable tasksets per data point
+record worst-case data age per 
+
+Experiment 1:
+m=4, n=15, |a|=[2,7]
+Utilization: range(0.4,0.4,3.6) (or, 10%-90%, step 10%)
+
+Experiment 2:
+n=30, |a|=[2,10], U=0.5*m
+Number of PE (m) = 2,4,6,8
+
+Experiment 3:
+m=4, |a|=[2,10], U=0.5*m
+number of tasks (n) = 10,20,30,40,50
+
+Experiment 4:
+m=4, n=30, U=0.5*m
+max length of taskchains |a| = 3,4,5,6,7,8,9,10

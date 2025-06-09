@@ -14,7 +14,7 @@ taskchains:
   - BB
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 24
@@ -25,14 +25,14 @@ taskchains:
   - BB
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 12
   - 26
   Buffers:
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 26
@@ -41,7 +41,7 @@ taskchains:
   Buffers:
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 29
@@ -50,7 +50,7 @@ taskchains:
   Buffers:
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 14
@@ -59,28 +59,28 @@ taskchains:
   Buffers:
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 39
   - 48
   Buffers:
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 47
   - 10
   Buffers:
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 46
   - 27
   Buffers:
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
 - Tasks:
   - 41
@@ -93,5 +93,5 @@ taskchains:
   - BB
   - BB
   - BB
-  InputType: samp
+  InputType: sampled
   OutputType: active
