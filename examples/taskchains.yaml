@@ -2,16 +2,7 @@ taskchains:
 - Tasks:
   - 1
   - 2
-  Buffers:
-  - BB
-  InputType: event
-  OutputType: active
-- Tasks:
-  - 1
-  - 2
   - 3
-  Buffers:
-  - BB
-  - BB
-  InputType: event
+  InputType: samp
   OutputType: active
+

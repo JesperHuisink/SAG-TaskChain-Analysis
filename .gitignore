@@ -4,10 +4,14 @@ nptest
 *~
 *.dot
 *.pdf
+*.out
+*.err
+nptest.sh
 
 debug/
 comparison/
 build/
 cmake-build-debug/
+E2EEvaluation/
 .vscode/
 .idea/

@@ -159,7 +159,8 @@ def main():
         print("WCL:", wcl)
 
 
-    OW = max(Hg, max(list({2*Hc_max[i]+Tmax[i]+wcl[i] for i in range(len(chains))})))
+    #OW = max(Hg, max(list({2*Hc_max[i]+Tmax[i]+wcl[i] for i in range(len(chains))})))
+    OW = max(list({Hg+Tmax[i]+wcl[i] for i in range(len(chains))})))
 
     if (opts.prio_policy == "EDF"):
         prio = assign_edf_priority

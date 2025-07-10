@@ -352,7 +352,6 @@ namespace NP {
 		//typename Task_chain<Time>::Task_chain_set taskchains;
 		std::vector<Task_chain<Time>> taskchains;
         std::vector<unsigned long> task_ids;
-		std::vector<Task<Time>> tasks;
 		std::vector<std::string> buffers;
 		
 		try {
@@ -361,19 +360,11 @@ namespace NP {
 			unsigned long chain_id = 0;
 			for (auto const &tc: TCs) {
 				task_ids = tc["Tasks"].as<std::vector<unsigned long>>();
-				//for (auto t:task_ids) std::cout<<t<<std::endl; // debug
-				tasks.clear();
-				for (auto i:task_ids){
-					tasks.push_back(Task<Time>(i));
-					//std::cout<<i<<std::endl;
-				}
-				auto buffers = tc["Buffers"].as<std::vector<std::string>>();
-				//std::cout<<"Buffers inited"<<std::endl;
 				auto inputtype = tc["InputType"].as<std::string>();
 				auto outputtype = tc["OutputType"].as<std::string>();
 				//std::cout<<"InputType inited"<<std::endl;
 
-				taskchains.push_back(Task_chain<Time>(tasks, buffers, inputtype, outputtype, chain_id));
+				taskchains.push_back(Task_chain<Time>(task_ids, inputtype=="event", outputtype=="active", chain_id));
 				//std::cout<<"Task chain pushed to vector"<<std::endl;
 				chain_id++;
 			}

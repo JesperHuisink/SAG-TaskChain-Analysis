@@ -120,7 +120,7 @@ namespace NP {
 					abort_actions[j.get_job_index()] = &a;
 				}
 
-				for (auto tc: task_chains){
+				for (const auto& tc: task_chains){
 					task_chain_result.data_ages.push_back(std::vector<Time>{});
 					task_chain_result.reaction_times.push_back(std::vector<Time>{});
 				}
@@ -482,6 +482,9 @@ namespace NP {
 			}
 			void submit_reaction_time(unsigned long tc_id, Time RT) const {
 				task_chain_result.reaction_times[tc_id].push_back(RT);
+			}
+			int get_num_cpus() const {
+				return num_cpus;
 			}
 
 		private:
