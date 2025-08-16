@@ -718,35 +718,7 @@ namespace NP {
 				Interval<Time> finish_times, int nprocs, const State_space_data<Time>& ssd)
 			{
 				possible_jobs.reserve(from.possible_jobs.size() + 1);
-				/*
-				// list of possibly running jobs sortd by LFT (descending)
-				std::vector<Running_job> sorted_jobs = from.possible_jobs;
-				std::sort(sorted_jobs.begin(), sorted_jobs.end(), [](const Running_job& a, const Running_job& b) {
-						return a.finish_time.max() > b.finish_time.max();
-					});
 				
-				// cutoff time: jobs with lft earlier (or equal) than this
-				// will certainly not be running anymore in the new state
-				Time cutoff = Time_model::constants<Time>::infinity();
-
-				// include all jobs with the same LFT as the number nprocs-1 in the sorted list
-				// (start index at nprocs-2 because array starts at index 0 of course)
-				int index=nprocs-2;
-				while(index<sorted_jobs.size()-1&&index>=0){
-					if(sorted_jobs[index].finish_time.max()==sorted_jobs[index+1].finish_time.max()) index++;
-					else break;
-				}
-
-				// Set cutoff time to the min EST of these possibly running jobs
-				for (int i = 0; i < index && i<sorted_jobs.size(); ++i) {
-					Time t = sorted_jobs[i].finish_time.min();
-					if (t < cutoff) {
-						cutoff = t;
-					}
-				}
-
-				Time est = start_times.min();
-				*/
 				// update the set of possibly running jobs
 				// keep them sorted to simplify merging
 				
@@ -848,10 +820,10 @@ namespace NP {
 											(tc.uses_event_input() ?
 													from.tc_data.EST_prev[tc.get_id()] : EST)
 											: from.tc_data.EIT_Reac_int[tc.get_id()][pred_index])
-										: from.tc_data.EIT_Reac_int[tc.get_id()][index];
+										: (from.tc_data.EIT_Reac_int[tc.get_id()][pred_index] == INVALID ?
+											from.tc_data.EIT_Reac_int[tc.get_id()][index] : std::min(from.tc_data.EIT_Reac_int[tc.get_id()][pred_index], from.tc_data.EIT_Reac_int[tc.get_id()][index]));
 
-								if(!is_source) tc_data.EIT_Reac_int[tc.get_id()][pred_index] = from.tc_data.EIT_Reac_int[tc.get_id()][index]!=INVALID?
-											from.tc_data.EIT_Reac_int[tc.get_id()][pred_index] : INVALID;
+								if(!is_source) tc_data.EIT_Reac_int[tc.get_id()][pred_index] = INVALID;
 
 								if(is_sink){
 									Time data_age = tc.uses_active_output() ?
@@ -879,7 +851,7 @@ namespace NP {
 							bool is_source = (task_iter == t.begin());
 							bool is_sink = (task_iter == std::prev(t.end()));
 
-							std::size_t index = tc.get_task_index(t, *task_iter);
+							std::size_t index = tc.get_task_index(t, *task_iter); // index (in chain) of task that was just dispatched
 							std::size_t pred_index = index-1;
 
 							for(const unsigned long& tau_l:tc.get_tasks()){ // for all tasks in tc
@@ -888,8 +860,10 @@ namespace NP {
 								tc_data.EIT_Age_out[tc.get_id()][tau_l_index] = !may_have_running_job(tau_l_index, state_space_data) ?
 										from.tc_data.EIT_Age_int[tc.get_id()][tau_l_index] : from.tc_data.EIT_Age_out[tc.get_id()][tau_l_index];
 
-								tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] = (pred_index==tau_l_index) ? INVALID :
-										(may_have_running_job(tau_l, state_space_data)? from.tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] : from.tc_data.EIT_Reac_int[tc.get_id()][tau_l_index]);
+								//tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] = (pred_index==tau_l_index) ? INVALID :
+								tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] = (pred_index==tau_l_index && std::find(t.begin(), t.end(), tau_j) != t.end()) ? INVALID :
+										((may_have_running_job(tau_l, state_space_data) || from.tc_data.EIT_Reac_int[tc.get_id()][tau_l_index]==INVALID || from.tc_data.EIT_Reac_out[tc.get_id()][tau_l_index]!=INVALID)?
+												from.tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] : from.tc_data.EIT_Reac_int[tc.get_id()][tau_l_index]);
 								
 								if(tau_j!=tau_l) tc_data.EIT_Reac_int[tc.get_id()][tau_l_index] = may_have_running_job(tau_l, state_space_data) ?
 										from.tc_data.EIT_Reac_int[tc.get_id()][tau_l_index] : INVALID;
@@ -908,7 +882,8 @@ namespace NP {
 										(is_source ?
 											(tc.uses_event_input() ?
 													from.tc_data.EST_prev[tc.get_id()] : EST)
-											: (may_have_running_job(t[pred_index], state_space_data) ? from.tc_data.EIT_Reac_out[tc.get_id()][pred_index] : from.tc_data.EIT_Reac_int[tc.get_id()][pred_index]))
+											: (may_have_running_job(t[pred_index], state_space_data) || from.tc_data.EIT_Reac_int[tc.get_id()][pred_index] == INVALID ?
+													from.tc_data.EIT_Reac_out[tc.get_id()][pred_index] : from.tc_data.EIT_Reac_int[tc.get_id()][pred_index]))
 										: from.tc_data.EIT_Reac_int[tc.get_id()][index];
 
 								if(is_sink){

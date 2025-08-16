@@ -142,11 +142,11 @@ namespace NP {
 
 			Time get_max_data_age(unsigned long tc_id){
 				auto m = std::max_element(task_chain_result.data_ages[tc_id].begin(),task_chain_result.data_ages[tc_id].end());
-				return m==task_chain_result.data_ages[tc_id].end()?777:*m;
+				return m==task_chain_result.data_ages[tc_id].end()?-1:*m;
 			}
 			Time get_max_reaction_time(unsigned long tc_id){
 				auto m = std::max_element(task_chain_result.reaction_times[tc_id].begin(),task_chain_result.reaction_times[tc_id].end());
-				return m==task_chain_result.reaction_times[tc_id].end()?777:*m;
+				return m==task_chain_result.reaction_times[tc_id].end()?-1:*m;
 			}
 
 			typedef std::deque<Node> Nodes;
