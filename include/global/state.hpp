@@ -725,7 +725,7 @@ namespace NP {
 				// If unicore, no need to keep track of possibly running jobs and leave set empty
 				if(nprocs==1) return;
 
-				const std::vector<long unsigned int>& preds = ssd.predecessors_of(j);
+				const std::vector<Job_index>& preds = ssd.predecessors_of(j);
 
 				bool added_j = false;
 				for (const auto& pj : from.possible_jobs)

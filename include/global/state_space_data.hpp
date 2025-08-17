@@ -120,11 +120,8 @@ namespace NP {
 					abort_actions[j.get_job_index()] = &a;
 				}
 
-				for (const auto& tc: task_chains){
-					task_chain_result.data_ages.push_back(std::vector<Time>{});
-					task_chain_result.reaction_times.push_back(std::vector<Time>{});
-				}
-
+				task_chain_result.data_ages.resize(task_chains.size(), 0);
+				task_chain_result.reaction_times.resize(task_chains.size(), 0);
 			}
 
 			size_t num_jobs() const
@@ -478,10 +475,10 @@ namespace NP {
 			}
 
 			void submit_data_age(unsigned long tc_id, Time DA) const {
-				task_chain_result.data_ages[tc_id].push_back(DA);
+				task_chain_result.data_ages[tc_id] = std::max(DA, task_chain_result.data_ages[tc_id]);
 			}
 			void submit_reaction_time(unsigned long tc_id, Time RT) const {
-				task_chain_result.reaction_times[tc_id].push_back(RT);
+				task_chain_result.reaction_times[tc_id] = std::max(RT, task_chain_result.reaction_times[tc_id]);
 			}
 			int get_num_cpus() const {
 				return num_cpus;
