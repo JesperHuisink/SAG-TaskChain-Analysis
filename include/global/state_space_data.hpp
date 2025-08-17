@@ -79,7 +79,6 @@ namespace NP {
 			const std::vector<Suspensions_list>& successors_suspensions;
 			const Task_chain_set& task_chains;
 			Task_chain_result<Time>& task_chain_result;
-			const std::vector<std::vector<Task_in_chain_info>>& task_to_chain;
 
 			State_space_data(const Workload& jobs,
 				const Precedence_constraints& edges,
@@ -103,7 +102,6 @@ namespace NP {
 				, abort_actions(jobs.size(), NULL)
 				, task_chains(task_chains)
 				, task_chain_result(task_chain_result)
-				, task_to_chain(_task_to_chain)
 			{
 				for (const auto& e : edges) {
 					_predecessors_suspensions[e.get_toIndex()].push_back({ &jobs[e.get_fromIndex()], e.get_suspension() });
@@ -111,7 +109,11 @@ namespace NP {
 					_successors_suspensions[e.get_fromIndex()].push_back({ &jobs[e.get_toIndex()], e.get_suspension() });
 				}
 
+				unsigned int max_task_id = 0;
 				for (const Job<Time>& j : jobs) {
+					if (j.get_task_id() > max_task_id)
+						max_task_id = j.get_task_id();
+
 					if (_predecessors_suspensions[j.get_job_index()].size() > 0) {
 						_successor_jobs_by_latest_arrival.insert({ j.latest_arrival(), &j });
 					}
@@ -135,16 +137,20 @@ namespace NP {
 				task_chain_result.reaction_times.resize(task_chains.size(), 0);
 
 				// init the task to chain lookup table
+				_task_to_chain.resize(max_task_id + 1);
 				for (unsigned long i = 0; i < task_chains.size(); i++) {
 					const Task_chain<Time>& tc = task_chains[i];
 					for (unsigned long j = 0; j < tc.get_tasks().size(); j++) {
 						unsigned long task_id = tc.get_tasks()[j];
-						if (task_id >= _task_to_chain.size())
-							_task_to_chain.resize(task_id + 1);
 						bool is_sink = (j == tc.get_tasks().size() - 1);
 						_task_to_chain[task_id].push_back({ i, j, is_sink });
 					}
 				}
+			}
+
+			const std::vector<Task_in_chain_info>& get_task_chains_of(unsigned int task) const 
+			{
+				return _task_to_chain[task];
 			}
 
 			size_t num_jobs() const
