@@ -55,6 +55,14 @@ namespace NP {
 			// list of actions when a job is aborted
 			std::vector<const Abort_action<Time>*> abort_actions;
 
+			// lookup table that maps task IDs to task chains and the position of the task in the task chain
+			struct Task_in_chain_info {
+				unsigned long chain_id;
+				unsigned long position_in_chain;
+				bool is_sink;
+			};
+			std::vector<std::vector<Task_in_chain_info>> _task_to_chain;
+
 			// number of cores
 			const unsigned int num_cpus;
 		
@@ -71,6 +79,8 @@ namespace NP {
 			const std::vector<Suspensions_list>& successors_suspensions;
 			const Task_chain_set& task_chains;
 			Task_chain_result<Time>& task_chain_result;
+			const std::vector<std::vector<Task_in_chain_info>>& task_to_chain;
+
 			State_space_data(const Workload& jobs,
 				const Precedence_constraints& edges,
 				const Abort_actions& aborts,
@@ -93,6 +103,7 @@ namespace NP {
 				, abort_actions(jobs.size(), NULL)
 				, task_chains(task_chains)
 				, task_chain_result(task_chain_result)
+				, task_to_chain(_task_to_chain)
 			{
 				for (const auto& e : edges) {
 					_predecessors_suspensions[e.get_toIndex()].push_back({ &jobs[e.get_fromIndex()], e.get_suspension() });
@@ -122,6 +133,18 @@ namespace NP {
 
 				task_chain_result.data_ages.resize(task_chains.size(), 0);
 				task_chain_result.reaction_times.resize(task_chains.size(), 0);
+
+				// init the task to chain lookup table
+				for (unsigned long i = 0; i < task_chains.size(); i++) {
+					const Task_chain<Time>& tc = task_chains[i];
+					for (unsigned long j = 0; j < tc.get_tasks().size(); j++) {
+						unsigned long task_id = tc.get_tasks()[j];
+						if (task_id >= _task_to_chain.size())
+							_task_to_chain.resize(task_id + 1);
+						bool is_sink = (j == tc.get_tasks().size() - 1);
+						_task_to_chain[task_id].push_back({ i, j, is_sink });
+					}
+				}
 			}
 
 			size_t num_jobs() const
