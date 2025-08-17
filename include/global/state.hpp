@@ -81,6 +81,7 @@ namespace NP {
 
 			// set of possibly running jobs, used for taskchain analysis
 			std::vector<Running_job> possible_jobs;
+			Index_set tasks_with_running_jobs;
 
 			// job_finish_times holds the finish times of all the jobs that still have an unscheduled successor
 			Job_finish_times job_finish_times;
@@ -716,14 +717,17 @@ namespace NP {
 				const Schedule_state& from,
 				Job_index j, Interval<Time> start_times,
 				Interval<Time> finish_times, int nprocs, const State_space_data<Time>& ssd)
-			{
-				possible_jobs.reserve(from.possible_jobs.size() + 1);
-				
+			{				
 				// update the set of possibly running jobs
 				// keep them sorted to simplify merging
 				
 				// If unicore, no need to keep track of possibly running jobs and leave set empty
 				if(nprocs==1) return;
+
+				possible_jobs.reserve(from.possible_jobs.size() + 1);
+
+				// add the task of job j to the set of tasks with possibly running jobs
+				tasks_with_running_jobs.add(ssd.jobs[j].get_task_id());
 
 				const std::vector<Job_index>& preds = ssd.predecessors_of(j);
 
@@ -741,7 +745,10 @@ namespace NP {
 							possible_jobs.emplace_back(j, finish_times);
 							added_j = true;
 						}
+						// add pj to the set of possibly running jobs and the task of job pj to 
+						// the set of tasks with possibly running jobs
 						possible_jobs.emplace_back(pj);
+						tasks_with_running_jobs.add(ssd.jobs[pj.idx].get_task_id());
 					}
 				}
 				// if we didn't add it yet, add it at the back
@@ -772,11 +779,8 @@ namespace NP {
 				return tc_init;
 			}
 
-			bool may_have_running_job(unsigned long taskID, const State_space_data<Time>& ssd){
-				for(auto& job: possible_jobs){
-					if (ssd.jobs[job.idx].get_task_id()==taskID) return true;
-				}
-				return false;
+			bool may_have_running_job(unsigned long task_id){
+				return tasks_with_running_jobs.contains(task_id);
 			}
 
 			void update_task_chain_data(const Schedule_state& from,
@@ -839,17 +843,17 @@ namespace NP {
 
 								//tc_data.EIT_Age_out[tc.get_id()][tau_l_index] = !may_have_running_job(tau_l_index, state_space_data) ?
 								//		from.tc_data.EIT_Age_int[tc.get_id()][tau_l_index] : from.tc_data.EIT_Age_out[tc.get_id()][tau_l_index];
-								if (!may_have_running_job(tau_l, state_space_data))
+								if (!may_have_running_job(tau_l))
 									tc_data.EIT_Age_out[tc_id][tau_l_index] = from.tc_data.EIT_Age_int[tc_id][tau_l_index];
 
 								//tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] = (pred_index==tau_l_index) ? INVALID :
 								//tc_data.EIT_Reac_out[tc_id][tau_l_index] = (may_have_running_job(tau_l, state_space_data) || from.tc_data.EIT_Reac_int[tc_id][tau_l_index] == INVALID || from.tc_data.EIT_Reac_out[tc_id][tau_l_index] != INVALID) ?
 								//		from.tc_data.EIT_Reac_out[tc_id][tau_l_index] : from.tc_data.EIT_Reac_int[tc_id][tau_l_index];
-								if (from.tc_data.EIT_Reac_int[tc_id][tau_l_index] != INVALID && from.tc_data.EIT_Reac_out[tc_id][tau_l_index] == INVALID && !may_have_running_job(tau_l, state_space_data))
+								if (from.tc_data.EIT_Reac_int[tc_id][tau_l_index] != INVALID && from.tc_data.EIT_Reac_out[tc_id][tau_l_index] == INVALID && !may_have_running_job(tau_l))
 									tc_data.EIT_Reac_out[tc_id][tau_l_index] = from.tc_data.EIT_Reac_int[tc_id][tau_l_index];
 
 								if (tau_j != tau_l)
-									tc_data.EIT_Reac_int[tc.get_id()][tau_l_index] = may_have_running_job(tau_l, state_space_data) ?
+									tc_data.EIT_Reac_int[tc.get_id()][tau_l_index] = may_have_running_job(tau_l) ?
 									from.tc_data.EIT_Reac_int[tc.get_id()][tau_l_index] : INVALID;
 							}
 						}
@@ -872,13 +876,13 @@ namespace NP {
 
 							tc_data.EIT_Age_int[tc_id][index] = is_source ?
 								(tc.uses_event_input() ? from.tc_data.EST_prev[tc_id] : EST)
-								: (may_have_running_job(t[pred_index], state_space_data) ? from.tc_data.EIT_Age_int[tc_id][pred_index] : from.tc_data.EIT_Age_int[tc_id][pred_index]);
+								: (may_have_running_job(t[pred_index]) ? from.tc_data.EIT_Age_int[tc_id][pred_index] : from.tc_data.EIT_Age_int[tc_id][pred_index]);
 
 							tc_data.EIT_Reac_int[tc_id][index] = from.tc_data.EIT_Reac_int[tc_id][index] == INVALID ?
 								(is_source ?
 									(tc.uses_event_input() ?
 										from.tc_data.EST_prev[tc_id] : EST)
-									: (may_have_running_job(t[pred_index], state_space_data) || from.tc_data.EIT_Reac_int[tc_id][pred_index] == INVALID ?
+									: (may_have_running_job(t[pred_index]) || from.tc_data.EIT_Reac_int[tc_id][pred_index] == INVALID ?
 										from.tc_data.EIT_Reac_out[tc_id][pred_index] : from.tc_data.EIT_Reac_int[tc_id][pred_index]))
 								: from.tc_data.EIT_Reac_int[tc_id][index];
 
