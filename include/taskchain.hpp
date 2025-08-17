@@ -12,8 +12,8 @@ namespace NP{
 
     template<class Time>
     struct Task_chain_result {
-        std::vector<std::vector<Time>> data_ages;
-        std::vector<std::vector<Time>> reaction_times;
+        std::vector<Time> data_ages;
+        std::vector<Time> reaction_times;
     };
 
     template<class Time>

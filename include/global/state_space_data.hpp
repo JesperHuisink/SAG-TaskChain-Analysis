@@ -55,6 +55,14 @@ namespace NP {
 			// list of actions when a job is aborted
 			std::vector<const Abort_action<Time>*> abort_actions;
 
+			// lookup table that maps task IDs to task chains and the position of the task in the task chain
+			struct Task_in_chain_info {
+				unsigned long chain_id;
+				unsigned long position_in_chain;
+				bool is_sink;
+			};
+			std::vector<std::vector<Task_in_chain_info>> _task_to_chain;
+
 			// number of cores
 			const unsigned int num_cpus;
 		
@@ -71,6 +79,7 @@ namespace NP {
 			const std::vector<Suspensions_list>& successors_suspensions;
 			const Task_chain_set& task_chains;
 			Task_chain_result<Time>& task_chain_result;
+
 			State_space_data(const Workload& jobs,
 				const Precedence_constraints& edges,
 				const Abort_actions& aborts,
@@ -100,7 +109,11 @@ namespace NP {
 					_successors_suspensions[e.get_fromIndex()].push_back({ &jobs[e.get_toIndex()], e.get_suspension() });
 				}
 
+				unsigned int max_task_id = 0;
 				for (const Job<Time>& j : jobs) {
+					if (j.get_task_id() > max_task_id)
+						max_task_id = j.get_task_id();
+
 					if (_predecessors_suspensions[j.get_job_index()].size() > 0) {
 						_successor_jobs_by_latest_arrival.insert({ j.latest_arrival(), &j });
 					}
@@ -120,11 +133,24 @@ namespace NP {
 					abort_actions[j.get_job_index()] = &a;
 				}
 
-				for (const auto& tc: task_chains){
-					task_chain_result.data_ages.push_back(std::vector<Time>{});
-					task_chain_result.reaction_times.push_back(std::vector<Time>{});
-				}
+				task_chain_result.data_ages.resize(task_chains.size(), 0);
+				task_chain_result.reaction_times.resize(task_chains.size(), 0);
 
+				// init the task to chain lookup table
+				_task_to_chain.resize(max_task_id + 1);
+				for (unsigned long i = 0; i < task_chains.size(); i++) {
+					const Task_chain<Time>& tc = task_chains[i];
+					for (unsigned long j = 0; j < tc.get_tasks().size(); j++) {
+						unsigned long task_id = tc.get_tasks()[j];
+						bool is_sink = (j == tc.get_tasks().size() - 1);
+						_task_to_chain[task_id].push_back({ i, j, is_sink });
+					}
+				}
+			}
+
+			const std::vector<Task_in_chain_info>& get_task_chains_of(unsigned int task) const 
+			{
+				return _task_to_chain[task];
 			}
 
 			size_t num_jobs() const
@@ -478,10 +504,10 @@ namespace NP {
 			}
 
 			void submit_data_age(unsigned long tc_id, Time DA) const {
-				task_chain_result.data_ages[tc_id].push_back(DA);
+				task_chain_result.data_ages[tc_id] = std::max(DA, task_chain_result.data_ages[tc_id]);
 			}
 			void submit_reaction_time(unsigned long tc_id, Time RT) const {
-				task_chain_result.reaction_times[tc_id].push_back(RT);
+				task_chain_result.reaction_times[tc_id] = std::max(RT, task_chain_result.reaction_times[tc_id]);
 			}
 			int get_num_cpus() const {
 				return num_cpus;
