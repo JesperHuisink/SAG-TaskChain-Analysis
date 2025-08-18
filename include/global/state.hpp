@@ -732,7 +732,7 @@ namespace NP {
 				{
 					auto running_job = pj.idx;
 					if (std::find(preds.begin(), preds.end(), running_job) == preds.end()
-						&& pj.finish_time.max() > core_availability(2).min()
+						&& pj.finish_time.max() >= core_availability(2).min()
 						&& pj.finish_time.max() > start_times.min() )
 					{
 						if (!added_j && running_job > j)
@@ -857,7 +857,7 @@ namespace NP {
 							for(const unsigned long& tau_l:tc.get_tasks()){ // for all tasks in tc
 								auto tau_l_iter = std::find(t.begin(), t.end(), tau_l);
 								std::size_t tau_l_index = tc.get_task_index(t, *tau_l_iter);
-								tc_data.EIT_Age_out[tc.get_id()][tau_l_index] = !may_have_running_job(tau_l_index, state_space_data) ?
+								tc_data.EIT_Age_out[tc.get_id()][tau_l_index] = !may_have_running_job(tau_l, state_space_data) ?
 										from.tc_data.EIT_Age_int[tc.get_id()][tau_l_index] : from.tc_data.EIT_Age_out[tc.get_id()][tau_l_index];
 
 								//tc_data.EIT_Reac_out[tc.get_id()][tau_l_index] = (pred_index==tau_l_index) ? INVALID :
